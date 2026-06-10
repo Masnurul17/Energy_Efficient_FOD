@@ -1,0 +1,59 @@
+<svg viewBox="0 0 1180 430" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1180" height="430" fill="#f8fafc"/>
+  <text x="590" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">Edge Deployment — Host PC + Three Edge Accelerators</text>
+
+  <!-- Host PC -->
+  <rect x="40" y="120" width="300" height="200" rx="14" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="40" y="120" width="300" height="38" rx="14" fill="#64748b"/>
+  <text x="190" y="145" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Host PC</text>
+  <rect x="65" y="180" width="115" height="55" rx="8" fill="#e2e8f0"/><text x="122" y="205" text-anchor="middle" font-size="13" fill="#0f172a">CPU</text><text x="122" y="223" text-anchor="middle" font-size="11" fill="#475569">X86 / ARM</text>
+  <rect x="200" y="180" width="115" height="55" rx="8" fill="#e2e8f0"/><text x="257" y="205" text-anchor="middle" font-size="13" fill="#0f172a">Memory</text><text x="257" y="223" text-anchor="middle" font-size="11" fill="#475569">buffer</text>
+  <rect x="65" y="252" width="250" height="48" rx="8" fill="#e2e8f0"/>
+  <text x="190" y="272" text-anchor="middle" font-size="12.5" fill="#0f172a">Pre-processing &amp; final report</text>
+  <text x="190" y="290" text-anchor="middle" font-size="11" fill="#475569">video in → result out</text>
+
+  <!-- bus arrow -->
+  <line x1="340" y1="210" x2="470" y2="210" stroke="#334155" stroke-width="2.5" marker-end="url(#ar2)"/>
+  <line x1="470" y1="225" x2="340" y2="225" stroke="#334155" stroke-width="2.5" marker-end="url(#ar2)"/>
+  <text x="405" y="200" text-anchor="middle" font-size="11" fill="#334155">PCIe / DRAM</text>
+
+  <!-- shared note -->
+  <text x="745" y="92" text-anchor="middle" font-size="12.5" fill="#475569">each device = Motion Detection Unit + AI Classifier + on-chip memory</text>
+
+  <!-- Device 1: Alveo U50 (FPGA) -->
+  <rect x="500" y="110" width="640" height="92" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="2"/>
+  <rect x="500" y="110" width="190" height="92" rx="12" fill="#ef4444"/>
+  <text x="595" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">AMD Alveo U50</text>
+  <text x="595" y="170" text-anchor="middle" font-size="12" fill="#fee2e2">FPGA · Vitis AI</text>
+  <rect x="708" y="128" width="130" height="56" rx="7" fill="#fee2e2"/><text x="773" y="152" text-anchor="middle" font-size="11.5" fill="#991b1b">Motion Detect</text><text x="773" y="170" text-anchor="middle" font-size="11.5" fill="#991b1b">Unit</text>
+  <rect x="852" y="128" width="130" height="56" rx="7" fill="#fee2e2"/><text x="917" y="152" text-anchor="middle" font-size="11.5" fill="#991b1b">AI Classifier</text><text x="917" y="170" text-anchor="middle" font-size="11.5" fill="#991b1b">Processing</text>
+  <rect x="996" y="128" width="128" height="56" rx="7" fill="#fee2e2"/><text x="1060" y="152" text-anchor="middle" font-size="11.5" fill="#991b1b">HBM</text><text x="1060" y="170" text-anchor="middle" font-size="11" fill="#b91c1c">high-bandwidth</text>
+
+  <!-- Device 2: Jetson Orin Nano (GPU) -->
+  <rect x="500" y="212" width="640" height="92" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="2"/>
+  <rect x="500" y="212" width="190" height="92" rx="12" fill="#22c55e"/>
+  <text x="595" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Jetson Orin Nano</text>
+  <text x="595" y="272" text-anchor="middle" font-size="12" fill="#dcfce7">GPU · JetPack</text>
+  <rect x="708" y="230" width="130" height="56" rx="7" fill="#dcfce7"/><text x="773" y="254" text-anchor="middle" font-size="11.5" fill="#166534">Motion Detect</text><text x="773" y="272" text-anchor="middle" font-size="11.5" fill="#166534">Unit</text>
+  <rect x="852" y="230" width="130" height="56" rx="7" fill="#dcfce7"/><text x="917" y="254" text-anchor="middle" font-size="11.5" fill="#166534">AI Classifier</text><text x="917" y="272" text-anchor="middle" font-size="11.5" fill="#166534">Processing</text>
+  <rect x="996" y="230" width="128" height="56" rx="7" fill="#dcfce7"/><text x="1060" y="254" text-anchor="middle" font-size="11.5" fill="#166534">DRAM</text><text x="1060" y="272" text-anchor="middle" font-size="11" fill="#15803d">+ runtime</text>
+
+  <!-- Device 3: Hailo-8 -->
+  <rect x="500" y="314" width="640" height="92" rx="12" fill="#fffbeb" stroke="#fde68a" stroke-width="2"/>
+  <rect x="500" y="314" width="190" height="92" rx="12" fill="#f59e0b"/>
+  <text x="595" y="352" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Hailo-8</text>
+  <text x="595" y="374" text-anchor="middle" font-size="12" fill="#fef3c7">AI Accelerator</text>
+  <rect x="708" y="332" width="130" height="56" rx="7" fill="#fef3c7"/><text x="773" y="356" text-anchor="middle" font-size="11.5" fill="#92400e">Motion Detect</text><text x="773" y="374" text-anchor="middle" font-size="11.5" fill="#92400e">Unit</text>
+  <rect x="852" y="332" width="130" height="56" rx="7" fill="#fef3c7"/><text x="917" y="356" text-anchor="middle" font-size="11.5" fill="#92400e">AI Classifier</text><text x="917" y="374" text-anchor="middle" font-size="11.5" fill="#92400e">Processing</text>
+  <rect x="996" y="332" width="128" height="56" rx="7" fill="#fef3c7"/><text x="1060" y="356" text-anchor="middle" font-size="11.5" fill="#92400e">on-chip</text><text x="1060" y="374" text-anchor="middle" font-size="11" fill="#b45309">memory</text>
+
+  <!-- connectors from bus to devices -->
+  <line x1="470" y1="217" x2="498" y2="156" stroke="#94a3b8" stroke-width="1.6"/>
+  <line x1="470" y1="218" x2="498" y2="258" stroke="#94a3b8" stroke-width="1.6"/>
+  <line x1="470" y1="219" x2="498" y2="360" stroke="#94a3b8" stroke-width="1.6"/>
+</svg>

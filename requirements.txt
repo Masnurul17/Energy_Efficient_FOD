@@ -1,0 +1,9 @@
+# Inference (Hailo-8 reference script)
+numpy>=1.24
+opencv-python>=4.8
+Pillow>=9.5
+zenlog>=1.1
+
+# CATATAN: hailo_platform / HailoRT BUKAN dari PyPI.
+# Install via Hailo SDK resmi (HailoRT) sesuai versi firmware Hailo-8 Anda:
+#   https://hailo.ai/developer-zone/

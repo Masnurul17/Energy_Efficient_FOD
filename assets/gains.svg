@@ -1,0 +1,19 @@
+<svg viewBox="0 0 1020 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1020" height="220" fill="#ffffff"/>
+  <text x="510" y="34" text-anchor="middle" font-size="16" font-weight="600" fill="#475569">Proposed method vs end-to-end (YOLOX) — average across classes &amp; devices</text>
+
+  <!-- card 1: accuracy -->
+  <rect x="30" y="60" width="300" height="130" rx="16" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="2"/>
+  <text x="180" y="128" text-anchor="middle" font-size="46" font-weight="800" fill="#059669">+28.31%</text>
+  <text x="180" y="160" text-anchor="middle" font-size="15" fill="#065f46">Average Accuracy Gain</text>
+
+  <!-- card 2: efficiency -->
+  <rect x="360" y="60" width="300" height="130" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="510" y="128" text-anchor="middle" font-size="46" font-weight="800" fill="#2563eb">3.6×</text>
+  <text x="510" y="160" text-anchor="middle" font-size="15" fill="#1e40af">Efficiency Gain</text>
+
+  <!-- card 3: latency -->
+  <rect x="690" y="60" width="300" height="130" rx="16" fill="#faf5ff" stroke="#d8b4fe" stroke-width="2"/>
+  <text x="840" y="128" text-anchor="middle" font-size="46" font-weight="800" fill="#7c3aed">−39.31%</text>
+  <text x="840" y="160" text-anchor="middle" font-size="15" fill="#6b21a8">Latency Reduction</text>
+</svg>
