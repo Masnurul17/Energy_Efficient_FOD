@@ -1,72 +1,175 @@
+<div align="center">
+
 # Energy-Efficient Fast Object Detection on Edge Devices for IoT Systems
 
-Official implementation of **Energy-Efficient Fast Object Detection on Edge Devices for IoT Systems**, published in **IEEE Internet of Things Journal (2025)**.
+### Frame Difference + Lightweight AI Classifier for Fast-Moving Object Detection (FMOD)
 
-This repository provides an efficient fast-moving object detection framework designed for real-time and low-power IoT edge devices.
+<p>
+<a href="https://doi.org/10.1109/JIOT.2025.3536526"><img src="https://img.shields.io/badge/IEEE%20IoT%20Journal-2025-1f6feb.svg"></a>
+<a href="https://doi.org/10.1109/JIOT.2025.3536526"><img src="https://img.shields.io/badge/DOI-10.1109%2FJIOT.2025.3536526-blue.svg"></a>
+<a href="#results"><img src="https://img.shields.io/badge/Task-Edge%20FMOD-8a2be2.svg"></a>
+<a href="#"><img src="https://img.shields.io/badge/Hardware-FPGA%20%7C%20GPU%20%7C%20AI%20Accel-10b981.svg"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+</p>
 
----
+Mas Nurul Achmadiah · Afaroj Ahamad · Chi-Chia Sun · Wen-Kai Kuo
 
-## 🔍 Overview
+<sub>National Formosa University · National Taipei University · Yuan Ze University</sub>
 
-Fast-moving object detection is challenging in IoT environments due to strict constraints on latency, power consumption, and hardware resources.  
-This work proposes a lightweight detection framework that combines **frame difference–based motion detection** with **efficient AI classifiers**, avoiding computationally expensive end-to-end object detectors.
+<p>
+📄 <a href="https://doi.org/10.1109/JIOT.2025.3536526"><b>Paper (IEEE Xplore)</b></a>
+</p>
 
-The proposed method achieves superior energy efficiency and lower inference latency while maintaining competitive accuracy, making it suitable for deployment on resource-constrained edge platforms.
+Official implementation. If you find this useful, please give it a star ⭐.
 
----
+<img src="assets/pipeline.svg" width="96%">
 
-## 🏗 Architecture
-
-The proposed system consists of three main stages:
-
-1. **Motion Detection (Frame Difference)**  
-   Detects moving regions by computing pixel-wise differences between consecutive frames.
-
-2. **Pre-processing**  
-   Extracts regions of interest (ROIs), performs resizing and normalization, and prepares inputs for AI inference.
-
-3. **AI Classification**  
-   Classifies detected moving objects using lightweight deep learning models, including:
-   - MobileNet
-   - ResNet50
-   - Inception-v4
-   - Vision Transformer (ViT)
+</div>
 
 ---
 
-## 📊 Experimental Results
+## Overview
 
-The proposed approach is evaluated on multiple edge platforms:
-- AMD Alveo™ U50 FPGA
-- NVIDIA Jetson Orin Nano
-- Hailo-8™ AI Accelerator
+Real-time detection of **fast-moving objects (FMOD)** on power-constrained edge devices is hard:
+end-to-end detectors (e.g., YOLO) process the whole frame every time, which is computationally
+heavy and energy-hungry. This work proposes a **lightweight hybrid**: a classical
+**frame-difference** motion detector that isolates only the moving region, followed by a
+**lightweight AI classifier** that labels just that region.
 
-Experimental results demonstrate:
-- Up to **28.31% accuracy improvement**
-- Up to **39.3% reduction in inference latency**
-- Up to **3.6× efficiency improvement** compared to end-to-end object detection methods
+Compared with the end-to-end baseline (YOLOX), the proposed method delivers large gains in accuracy,
+energy efficiency, and latency — making it well suited for IoT systems where battery life and
+real-time response matter.
 
----
+<div align="center">
+<img src="assets/gains.svg" width="92%">
+</div>
 
-## 📄 Paper
+## Method
 
-**Energy-Efficient Fast Object Detection on Edge Devices for IoT Systems**  
-*IEEE Internet of Things Journal*, vol. 12, no. 11, pp. 16681–16693, 2025.
+The algorithm runs as a per-frame loop with three stages: **(1) movement detection** via image
+morphology, **(2) pre-processing** of the detected region, and **(3) classification** by a
+lightweight CNN/Transformer. Because only the moving region of interest (ROI) is classified —
+not the whole frame — the pipeline avoids the heavy global computation of end-to-end detectors.
 
----
+| Stage | What happens |
+|---|---|
+| **1 · Movement Detection** | Absolute frame difference → grayscale → Gaussian blur → erosion + dilation (morphological opening) → Otsu threshold → ROI bounding box. |
+| **2 · Pre-processing** | Crop the ROI → resize to `224×224×3` (bilinear) → ImageNet mean/std normalization. |
+| **3 · AI Classifier** | MobileNet · ResNet50 · Inception-v4 · ViT Base → softmax → predicted class. |
 
-## 📚 Citation
+## Hardware Deployment
 
-If you find this work useful, please cite:
+The system is split between a **host PC** (CPU pre-processing + memory buffering) and an **edge
+accelerator** that runs the motion-detection unit and the AI classifier. Three platforms are
+evaluated, spanning FPGA, GPU, and a dedicated AI accelerator.
+
+<div align="center">
+<img src="assets/hardware.svg" width="96%">
+</div>
+
+| Platform | Type | Toolchain | Power tool |
+|---|---|---|---|
+| AMD Alveo U50 | FPGA | Vitis AI | PowerTOP |
+| NVIDIA Jetson Orin Nano | GPU (SoC) | JetPack | jtop |
+| Hailo-8 | AI Accelerator | Hailo SDK | PowerTOP |
+
+> Note: ViT Base is not evaluated on Alveo U50 (not supported by Vitis AI at the time of the study).
+
+## Results
+
+Across all classes and devices, the proposed frame-difference + classifier method improves the
+**average accuracy by 28.31%**, the **average efficiency by 3.6×**, and reduces **average latency
+by 39.31%** relative to the end-to-end YOLOX baseline.
+
+<div align="center">
+<img src="assets/accuracy_chart.svg" width="70%">
+</div>
+
+**Representative numbers (Bird class) — MobileNet (proposed) vs YOLOX (end-to-end):**
+
+| Device | Model | Accuracy | Latency | Efficiency |
+|---|---|:---:|:---:|:---:|
+| Hailo-8 | MobileNet | **92.6%** | 35.63 ms | 0.1731 |
+| Hailo-8 | YOLOX | 67.4% | 48.62 ms | 0.0393 |
+| Jetson Orin Nano | MobileNet | **100%** | 41.38 ms | 0.8332 %/msW |
+| Jetson Orin Nano | YOLOX | 66.92% | 61.67 ms | 0.4203 %/msW |
+| AMD Alveo U50 | MobileNet | **94.39%** | 7.74 ms | 0.8935 %/mW |
+| AMD Alveo U50 | YOLOX | 69.11% | 16.37 ms | 0.1189 %/mW |
+
+Key takeaways from the paper: **MobileNet** is the most balanced choice across all three devices
+(high accuracy, low latency, high energy efficiency); **YOLOX** consistently shows the lowest
+accuracy and efficiency for fast objects. The hardest classes are **trains** and **airplanes**
+(fastest motion → most blur).
+
+<details>
+<summary><b>Evaluation setup</b></summary>
+
+- Classes: birds, cars, trains, airplanes.
+- Classifiers: MobileNet, ResNet50, Inception-v4, ViT Base (ImageNet-pretrained); baseline YOLOX (MS-COCO).
+- Metrics: Accuracy (%), Latency (ms), Energy (Joule), Efficiency (%/mW).
+- Power/latency measured with PowerTOP (Alveo/Hailo) and jtop (Jetson).
+
+</details>
+
+## Repository Structure
+
+```
+fmod-edge-iot/
+├── README.md
+├── requirements.txt
+├── LICENSE
+├── assets/                     # colorful figures (SVG)
+│   ├── pipeline.svg
+│   ├── hardware.svg
+│   ├── gains.svg
+│   └── accuracy_chart.svg
+└── src/
+    ├── inference_edit.py       # Hailo-8 real-time inference (frame diff + classifier)
+    └── class_name.py           # ImageNet label mapping (fill in for your model)
+```
+
+## Quick Start (Hailo-8)
+
+The reference inference script targets the **Hailo-8** accelerator and reads a video, runs frame
+differencing to find the ROI, classifies it, and overlays the label while reporting FPS/accuracy.
+
+```bash
+pip install -r requirements.txt
+# hailo_platform comes from the Hailo SDK / HailoRT (install separately, not via PyPI)
+
+# place a compiled model at  ./hef_model/resnet50.hef  and a video  ./<class>.mp4
+python src/inference_edit.py
+```
+
+Edit the configuration block at the top of `src/inference_edit.py`:
+
+```python
+classifier_model = './hef_model/' + 'resnet50.hef'   # compiled .hef model
+out_parser        = 'resnet50/fc1'                    # output node name
+datatest          = 'hummingbird'                     # target class label / video name
+dim               = (224, 224)                        # classifier input size
+```
+
+> Fill `src/class_name.py` with the 1000 ImageNet labels in the order your model outputs them,
+> so `class_name[argmax(softmax(logits))]` resolves to the correct class.
+
+## Citation
 
 ```bibtex
-@ARTICLE{10879008,
-  author={Nurul Achmadiah, Mas and Ahamad, Afaroj and Sun, Chi-Chia and Kuo, Wen-Kai},
-  journal={IEEE Internet of Things Journal}, 
-  title={Energy-Efficient Fast Object Detection on Edge Devices for IoT Systems}, 
-  year={2025},
-  volume={12},
-  number={11},
-  pages={16681-16694},
-  keywords={Object detection;Internet of Things;Accuracy;Real-time systems;Image edge detection;Object recognition;Artificial intelligence;Hardware acceleration;Computational modeling;Cameras;AI classifier;energy efficiency;fast-moving object detection (FMOD);high-latency;real-time performance},
-  doi={10.1109/JIOT.2025.3536526}}
+@article{achmadiah2025fmod,
+  title   = {Energy-Efficient Fast Object Detection on Edge Devices for IoT Systems},
+  author  = {Achmadiah, Mas Nurul and Ahamad, Afaroj and Sun, Chi-Chia and Kuo, Wen-Kai},
+  journal = {IEEE Internet of Things Journal},
+  volume  = {12},
+  number  = {11},
+  pages   = {16681--16694},
+  year    = {2025},
+  doi     = {10.1109/JIOT.2025.3536526}
+}
+```
+
+## Acknowledgements
+
+This work was supported by the National Science and Technology Council, Taiwan
+(Grant No. 113-2221-E-150-026-MY3). Built on the Hailo SDK, AMD Vitis AI, and NVIDIA JetPack,
+with ImageNet-pretrained MobileNet, ResNet50, Inception-v4, and ViT Base.
