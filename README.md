@@ -5,10 +5,10 @@
 ### Frame Difference + Lightweight AI Classifier for Fast-Moving Object Detection (FMOD)
 
 <p>
+<a href="https://arxiv.org/abs/2602.09515"><img src="https://img.shields.io/badge/arXiv-2602.09515-b31b1b.svg"></a>
 <a href="https://doi.org/10.1109/JIOT.2025.3536526"><img src="https://img.shields.io/badge/IEEE%20IoT%20Journal-2025-1f6feb.svg"></a>
 <a href="https://doi.org/10.1109/JIOT.2025.3536526"><img src="https://img.shields.io/badge/DOI-10.1109%2FJIOT.2025.3536526-blue.svg"></a>
 <a href="#results"><img src="https://img.shields.io/badge/Task-Edge%20FMOD-8a2be2.svg"></a>
-<a href="#"><img src="https://img.shields.io/badge/Hardware-FPGA%20%7C%20GPU%20%7C%20AI%20Accel-10b981.svg"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg"></a>
 </p>
 
@@ -17,12 +17,21 @@ Mas Nurul Achmadiah · Afaroj Ahamad · Chi-Chia Sun · Wen-Kai Kuo
 <sub>National Formosa University · National Taipei University · Yuan Ze University</sub>
 
 <p>
-📄 <a href="https://doi.org/10.1109/JIOT.2025.3536526"><b>Paper (IEEE Xplore)</b></a>
+📄 <a href="https://arxiv.org/abs/2602.09515"><b>Paper (arXiv)</b></a> &nbsp;·&nbsp;
+🔗 <a href="https://doi.org/10.1109/JIOT.2025.3536526"><b>IEEE Xplore</b></a>
 </p>
 
 Official implementation. If you find this useful, please give it a star ⭐.
 
 <img src="assets/pipeline.svg" width="96%">
+
+<table>
+<tr>
+<td><img src="assets/detect_hummingbird1.jpg" width="430"></td>
+<td><img src="assets/detect_bird1.png" width="430"></td>
+</tr>
+</table>
+<sub>Real detections from the proposed frame-difference + classifier pipeline (hummingbird & blue tit).</sub>
 
 </div>
 
@@ -56,6 +65,34 @@ not the whole frame — the pipeline avoids the heavy global computation of end-
 | **1 · Movement Detection** | Absolute frame difference → grayscale → Gaussian blur → erosion + dilation (morphological opening) → Otsu threshold → ROI bounding box. |
 | **2 · Pre-processing** | Crop the ROI → resize to `224×224×3` (bilinear) → ImageNet mean/std normalization. |
 | **3 · AI Classifier** | MobileNet · ResNet50 · Inception-v4 · ViT Base → softmax → predicted class. |
+
+<div align="center">
+<img src="assets/flow_colored.svg" width="92%">
+</div>
+
+### Movement Detection, step by step
+
+Two consecutive grayscale frames are subtracted; the result is cleaned with morphology and binarized
+to isolate the moving region before the ROI is cropped.
+
+<div align="center">
+<img src="assets/proc_frame_difference.png" width="360"><br>
+<sub><b>Frame difference</b> — |Frame₁ − Frame₂| highlights the moving object.</sub>
+</div>
+
+| Step | Before → After |
+|---|---|
+| Erosion | <img src="assets/proc_erode.png" width="420"> |
+| Dilation | <img src="assets/proc_dilate.png" width="420"> |
+| Blurring | <img src="assets/proc_blur.png" width="420"> |
+| Threshold (Otsu) | <img src="assets/proc_threshold.png" width="420"> |
+
+<details>
+<summary><b>Original paper flowchart (Fig. 1)</b></summary>
+
+<div align="center"><img src="assets/fig_flowchart.png" width="640"></div>
+
+</details>
 
 ## Hardware Deployment
 
@@ -111,6 +148,38 @@ accuracy and efficiency for fast objects. The hardest classes are **trains** and
 
 </details>
 
+## Qualitative Results
+
+The detector localizes fast-moving birds in real footage and labels the cropped region with the
+AI classifier. Bounding boxes are drawn only on the moving ROI returned by the frame-difference
+stage.
+
+<div align="center">
+<table>
+<tr>
+<td align="center"><img src="assets/detect_hummingbird1.jpg" width="420"><br><sub>Hummingbird in flight</sub></td>
+<td align="center"><img src="assets/detect_hummingbird2.jpg" width="420"><br><sub>Hummingbird approaching feeder</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="assets/detect_bird1.png" width="420"><br><sub>Blue tit on feeder</sub></td>
+<td align="center"><img src="assets/detect_bird2.png" width="420"><br><sub>Blue tit (motion blur)</sub></td>
+</tr>
+</table>
+</div>
+
+<details>
+<summary><b>Algorithms (pseudo-code from the paper)</b></summary>
+
+**Algorithm 1 — Feed Image** (frame buffering loop)
+
+<div align="center"><img src="assets/algorithm1.png" width="620"></div>
+
+**Algorithm 2 — Find ROI Arguments** (bounding-box extraction)
+
+<div align="center"><img src="assets/algorithm2.png" width="520"></div>
+
+</details>
+
 ## Repository Structure
 
 ```
@@ -118,11 +187,13 @@ fmod-edge-iot/
 ├── README.md
 ├── requirements.txt
 ├── LICENSE
-├── assets/                     # colorful figures (SVG)
-│   ├── pipeline.svg
-│   ├── hardware.svg
-│   ├── gains.svg
-│   └── accuracy_chart.svg
+├── assets/                          # figures
+│   ├── pipeline.svg  flow_colored.svg  hardware.svg  gains.svg  accuracy_chart.svg  # colorful diagrams
+│   ├── fig_flowchart.png                                          # full algorithm flowchart
+│   ├── proc_frame_difference.png  proc_erode.png  proc_dilate.png # movement-detection steps
+│   ├── proc_blur.png  proc_threshold.png
+│   ├── algorithm1.png  algorithm2.png                            # pseudo-code
+│   └── detect_*.{png,jpg}                                        # qualitative detections
 └── src/
     ├── inference_edit.py       # Hailo-8 real-time inference (frame diff + classifier)
     └── class_name.py           # ImageNet label mapping (fill in for your model)
@@ -164,7 +235,9 @@ dim               = (224, 224)                        # classifier input size
   number  = {11},
   pages   = {16681--16694},
   year    = {2025},
-  doi     = {10.1109/JIOT.2025.3536526}
+  doi     = {10.1109/JIOT.2025.3536526},
+  eprint  = {2602.09515},
+  archivePrefix = {arXiv}
 }
 ```
 

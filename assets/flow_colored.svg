@@ -1,0 +1,119 @@
+<svg viewBox="0 0 1080 1000" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="fa" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1080" height="1000" fill="#f8fafc"/>
+  <text x="540" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">Algorithm Flow — Movement Detection · Pre-processing · Classifier</text>
+
+  <!-- ===== Lanes ===== -->
+  <rect x="30" y="108" width="430" height="600" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-dasharray="6 5"/>
+  <text x="46" y="408" font-size="13" font-weight="700" fill="#2563eb" text-anchor="middle" transform="rotate(-90 46 408)">Movement Detection</text>
+
+  <rect x="600" y="108" width="440" height="296" rx="14" fill="#ecfdf5" stroke="#a7f3d0" stroke-dasharray="6 5"/>
+  <text x="614" y="256" font-size="13" font-weight="700" fill="#059669" text-anchor="middle" transform="rotate(-90 614 256)">Pre-processing</text>
+
+  <rect x="600" y="420" width="440" height="318" rx="14" fill="#f5f3ff" stroke="#ddd6fe" stroke-dasharray="6 5"/>
+  <text x="614" y="579" font-size="13" font-weight="700" fill="#7c3aed" text-anchor="middle" transform="rotate(-90 614 579)">CNN / Transformer Classifier</text>
+
+  <!-- ===== Terminals ===== -->
+  <rect x="180" y="50" width="120" height="40" rx="20" fill="#334155"/>
+  <text x="240" y="75" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Start</text>
+
+  <rect x="455" y="916" width="130" height="40" rx="20" fill="#334155"/>
+  <text x="520" y="941" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">End</text>
+
+  <!-- ===== Movement Detection nodes (cx=240) ===== -->
+  <rect x="160" y="118" width="160" height="38" rx="8" fill="#fff" stroke="#3b82f6"/><text x="240" y="142" text-anchor="middle" font-size="12.5" fill="#1e293b">Next Instance</text>
+  <rect x="118" y="182" width="110" height="38" rx="8" fill="#fff" stroke="#3b82f6"/><text x="173" y="206" text-anchor="middle" font-size="12.5" fill="#1e293b">Frame i</text>
+  <rect x="252" y="182" width="110" height="38" rx="8" fill="#fff" stroke="#3b82f6"/><text x="307" y="206" text-anchor="middle" font-size="12.5" fill="#1e293b">Frame i+1</text>
+  <rect x="160" y="248" width="160" height="38" rx="8" fill="#fff" stroke="#3b82f6"/><text x="240" y="272" text-anchor="middle" font-size="12.5" fill="#1e293b">Frame Difference</text>
+  <rect x="160" y="312" width="160" height="36" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="240" y="335" text-anchor="middle" font-size="12.5" fill="#1e3a8a">Erosion</text>
+  <rect x="160" y="370" width="160" height="36" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="240" y="393" text-anchor="middle" font-size="12.5" fill="#1e3a8a">Dilation</text>
+  <rect x="160" y="428" width="160" height="36" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="240" y="451" text-anchor="middle" font-size="12.5" fill="#1e3a8a">Blur</text>
+  <rect x="160" y="486" width="160" height="36" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="240" y="509" text-anchor="middle" font-size="12.5" fill="#1e3a8a">Threshold</text>
+  <rect x="160" y="544" width="160" height="36" rx="8" fill="#fff" stroke="#3b82f6"/><text x="240" y="567" text-anchor="middle" font-size="12.5" fill="#1e293b">Sampling</text>
+
+  <!-- decision1 -->
+  <polygon points="240,602 340,646 240,690 140,646" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="240" y="642" text-anchor="middle" font-size="11" fill="#92400e">Sample_size &gt;</text>
+  <text x="240" y="656" text-anchor="middle" font-size="11" fill="#92400e">frame_thresh</text>
+
+  <!-- connector A1 -->
+  <circle cx="240" cy="742" r="18" fill="#6366f1"/><text x="240" y="747" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">A</text>
+
+  <!-- ===== Pre-processing nodes (cx=820) ===== -->
+  <circle cx="820" cy="150" r="18" fill="#6366f1"/><text x="820" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">A</text>
+  <rect x="635" y="186" width="130" height="36" rx="8" fill="#fff" stroke="#10b981"/><text x="700" y="209" text-anchor="middle" font-size="12" fill="#1e293b">Samples_size</text>
+  <rect x="875" y="186" width="120" height="36" rx="8" fill="#fff" stroke="#10b981"/><text x="935" y="209" text-anchor="middle" font-size="12" fill="#1e293b">Frame i</text>
+  <rect x="745" y="250" width="150" height="36" rx="8" fill="#d1fae5" stroke="#10b981"/><text x="820" y="273" text-anchor="middle" font-size="12.5" fill="#065f46">Crop</text>
+  <rect x="745" y="304" width="150" height="36" rx="8" fill="#d1fae5" stroke="#10b981"/><text x="820" y="327" text-anchor="middle" font-size="12.5" fill="#065f46">Resize</text>
+  <rect x="745" y="358" width="150" height="36" rx="8" fill="#d1fae5" stroke="#10b981"/><text x="820" y="381" text-anchor="middle" font-size="12.5" fill="#065f46">Mean Subtraction</text>
+
+  <!-- ===== Classifier nodes (cx=820) ===== -->
+  <rect x="710" y="452" width="220" height="42" rx="8" fill="#ede9fe" stroke="#8b5cf6"/><text x="820" y="471" text-anchor="middle" font-size="12.5" fill="#5b21b6">CNN / Transformer</text><text x="820" y="486" text-anchor="middle" font-size="12.5" fill="#5b21b6">Classifier</text>
+  <polygon points="820,512 922,558 820,604 718,558" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="820" y="554" text-anchor="middle" font-size="11" fill="#92400e">Class ∈</text>
+  <text x="820" y="568" text-anchor="middle" font-size="11" fill="#92400e">Object classes</text>
+  <rect x="745" y="626" width="150" height="36" rx="8" fill="#fff" stroke="#8b5cf6"/><text x="820" y="649" text-anchor="middle" font-size="12.5" fill="#1e293b">Bounding Box</text>
+  <rect x="745" y="680" width="150" height="36" rx="8" fill="#fff" stroke="#8b5cf6"/><text x="820" y="703" text-anchor="middle" font-size="12.5" fill="#1e293b">Write to frame I</text>
+
+  <!-- decision3 -->
+  <polygon points="520,822 605,864 520,906 435,864" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="520" y="860" text-anchor="middle" font-size="11" fill="#92400e">I = frame</text>
+  <text x="520" y="874" text-anchor="middle" font-size="11" fill="#92400e">number</text>
+
+  <!-- ===== Arrows ===== -->
+  <!-- left chain -->
+  <line x1="240" y1="90"  x2="240" y2="116" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="156" x2="173" y2="180" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="156" x2="307" y2="180" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="173" y1="220" x2="232" y2="246" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="307" y1="220" x2="248" y2="246" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="286" x2="240" y2="310" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="348" x2="240" y2="368" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="406" x2="240" y2="426" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="464" x2="240" y2="484" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="522" x2="240" y2="542" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="240" y1="580" x2="240" y2="600" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <!-- decision1 YES -> A1 -->
+  <line x1="240" y1="690" x2="240" y2="722" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="256" y="712" font-size="11" font-weight="700" fill="#16a34a">YES</text>
+  <!-- A1 -> A2 (off-page connector, dashed) -->
+  <path d="M258,742 C420,742 700,360 802,166" fill="none" stroke="#6366f1" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#fa)"/>
+
+  <!-- decision1 NO -> merge to decision3 top -->
+  <polyline points="340,646 405,646 405,800 520,800 520,820" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="350" y="638" font-size="11" font-weight="700" fill="#dc2626">NO</text>
+
+  <!-- preprocessing -->
+  <line x1="820" y1="168" x2="730" y2="184" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="820" y1="168" x2="915" y2="184" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="700" y1="222" x2="800" y2="248" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="935" y1="222" x2="840" y2="248" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="820" y1="286" x2="820" y2="302" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <line x1="820" y1="340" x2="820" y2="356" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <!-- mean sub -> classifier -->
+  <line x1="820" y1="394" x2="820" y2="450" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <!-- classifier -> decision2 -->
+  <line x1="820" y1="494" x2="820" y2="510" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <!-- decision2 YES -> bbox -->
+  <line x1="820" y1="604" x2="820" y2="624" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="836" y="620" font-size="11" font-weight="700" fill="#16a34a">YES</text>
+  <line x1="820" y1="662" x2="820" y2="678" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <!-- decision2 NO -> down merge into write line -->
+  <polyline points="922,558 975,558 975,760 822,760" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="930" y="550" font-size="11" font-weight="700" fill="#dc2626">NO</text>
+  <!-- write to frame I -> decision3 top (via 760,800) -->
+  <polyline points="820,716 820,800 520,800" fill="none" stroke="#334155" stroke-width="2"/>
+  <circle cx="820" cy="760" r="3" fill="#334155"/>
+  <circle cx="520" cy="800" r="3" fill="#334155"/>
+
+  <!-- decision3 YES -> End -->
+  <line x1="520" y1="906" x2="520" y2="914" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="536" y="922" font-size="11" font-weight="700" fill="#16a34a">YES</text>
+  <!-- decision3 NO -> loop back to Next Instance -->
+  <polyline points="435,864 20,864 20,137 158,137" fill="none" stroke="#334155" stroke-width="2" marker-end="url(#fa)"/>
+  <text x="36" y="856" font-size="11" font-weight="700" fill="#dc2626">NO</text>
+</svg>
